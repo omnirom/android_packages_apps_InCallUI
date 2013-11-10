@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/incoming_call_card_height"
+    android:layout_gravity="bottom|center_horizontal"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/container_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:background="@drawable/incoming_call_card"
+        android:orientation="vertical"
+        android:padding="8dp" >
+
+        <ImageView
+            android:id="@+id/img_contact"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/picture_unknown" />
+
+        <TextView
+            android:id="@+id/txt_contact_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/img_contact"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="2dp"
+            android:layout_toRightOf="@+id/img_contact"
+            android:layout_weight="1"
+            android:ellipsize="marquee"
+            android:gravity="center_vertical"
+            android:lines="1"
+            android:textColor="#333333"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/separator"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/btn_reject"
+            android:layout_alignTop="@+id/btn_reject"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_toRightOf="@+id/btn_reject"
+            android:background="#888888"
+            android:maxWidth="1dp" />
+
+        <Button
+            android:id="@+id/btn_answer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_toRightOf="@+id/separator"
+            android:layout_marginLeft="4dp"
+            style="@*android:style/Widget.Holo.Button.Borderless"
+            android:drawableLeft="@drawable/ic_lockscreen_answer_normal"
+            android:text="@string/description_target_answer"
+            android:textColor="#000000"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/btn_reject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/img_contact"
+            style="@*android:style/Widget.Holo.Button.Borderless"
+            android:drawableLeft="@drawable/ic_lockscreen_decline_normal"
+            android:text="@string/description_target_decline"
+            android:textColor="#000000"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
+
+</LinearLayout>
