@@ -432,7 +432,7 @@ public class StatusBarNotifier implements InCallPresenter.InCallStateListener {
         // the InCallScreen to be launched immediately *unless* the
         // current foreground activity is marked as "immersive".
         Log.d(this, "- Setting fullScreenIntent: " + intent);
-        builder.setFullScreenIntent(intent, true);
+        builder.setFullScreenIntent(intent, false); // XPLOD
 
         // Ugly hack alert:
         //
