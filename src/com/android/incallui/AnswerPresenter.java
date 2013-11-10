@@ -18,6 +18,10 @@ package com.android.incallui;
 
 import com.android.services.telephony.common.Call;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.PowerManager;
+
 import java.util.ArrayList;
 
 /**
@@ -89,16 +93,25 @@ public class AnswerPresenter extends Presenter<AnswerPresenter.AnswerUi>
         // Listen for call updates for the current call.
         CallList.getInstance().addCallUpdateListener(mCallId, this);
 
-        Log.d(TAG, "Showing incoming for call id: " + mCallId + " " + this);
-        final ArrayList<String> textMsgs = CallList.getInstance().getTextResponses(
-                call.getCallId());
-        getUi().showAnswerUi(true);
-
-        if (call.can(Call.Capabilities.RESPOND_VIA_TEXT) && textMsgs != null) {
-            getUi().showTextButton(true);
-            getUi().configureMessageDialog(textMsgs);
+        final Context context = getUi().getContext();
+        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        if (pm.isScreenOn()) {
+            Intent intent = new Intent(context, InCallCardActivity.class);
+            intent.putExtra(InCallCardActivity.EXTRA_CALLER_ID, call.getIdentification().getCnapName());
+            intent.putExtra(InCallCardActivity.EXTRA_CALL_ID, mCallId);
+            getUi().getContext().startActivity(new Intent(getUi().getContext(), InCallCardActivity.class));
         } else {
-            getUi().showTextButton(false);
+            Log.d(TAG, "Showing incoming for call id: " + mCallId + " " + this);
+            final ArrayList<String> textMsgs = CallList.getInstance().getTextResponses(
+                    call.getCallId());
+            getUi().showAnswerUi(true);
+
+            if (call.can(Call.Capabilities.RESPOND_VIA_TEXT) && textMsgs != null) {
+                getUi().showTextButton(true);
+                getUi().configureMessageDialog(textMsgs);
+            } else {
+                getUi().showTextButton(false);
+            }
         }
     }
 
@@ -157,5 +170,6 @@ public class AnswerPresenter extends Presenter<AnswerPresenter.AnswerUi>
         public void showTextButton(boolean show);
         public void showMessageDialog();
         public void configureMessageDialog(ArrayList<String> textResponses);
+        public Context getContext();
     }
 }
