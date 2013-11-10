@@ -18,6 +18,7 @@ package com.android.incallui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
@@ -71,6 +72,10 @@ public class AnswerFragment extends BaseFragment<AnswerPresenter, AnswerPresente
     @Override
     AnswerPresenter.AnswerUi getUi() {
         return this;
+    }
+
+    public Context getContext() {
+        return getView().getContext();
     }
 
     @Override
