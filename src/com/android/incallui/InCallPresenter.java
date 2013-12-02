@@ -21,7 +21,9 @@ import com.google.android.collect.Sets;
 import com.google.common.base.Preconditions;
 
 import android.content.Context;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.provider.Settings;
 import android.os.PowerManager;
 
 import com.android.services.telephony.common.Call;
@@ -633,9 +635,12 @@ public class InCallPresenter implements CallList.Listener {
             mInCallActivity = null;
         }
 
+        boolean nonIntrusiveDisabled = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.NON_INTRUSIVE_INCALL, 1) == 0;
+
         final PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
         // If the screen is on, we'll prefer to not interrupt the user too much and slide in a card
-        if (pm.isScreenOn()) {
+        if (pm.isScreenOn() && !nonIntrusiveDisabled) {
             Intent intent = new Intent(mContext, InCallCardActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             mContext.startActivity(intent);
