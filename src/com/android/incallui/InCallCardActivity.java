@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.Contacts;
 import android.view.animation.DecelerateInterpolator;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -18,7 +19,6 @@ import android.widget.TextView;
 
 import com.android.incallui.ContactInfoCache.ContactCacheEntry;
 import com.android.incallui.ContactInfoCache.ContactInfoCacheCallback;
-
 import com.android.services.telephony.common.CallIdentification;
 import com.android.services.telephony.common.Call;
 
@@ -111,6 +111,9 @@ public class InCallCardActivity extends Activity {
             });
     }
 
-
+    @Override
+    public void onBackPressed(){
+    	//Don't allow back button on this activity. fix for http://jira.omnirom.org/browse/OMNI-296
+    }
 }
 
