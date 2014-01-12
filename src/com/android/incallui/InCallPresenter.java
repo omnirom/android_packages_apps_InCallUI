@@ -58,6 +58,7 @@ public class InCallPresenter implements CallList.Listener {
     private AccelerometerListener mAccelerometerListener;
     private ProximitySensor mProximitySensor;
     private boolean mServiceConnected = false;
+    private boolean mCallUiInBackground = true;
 
     /**
      * Is true when the activity has been previously started. Some code needs to know not just if
@@ -281,7 +282,7 @@ public class InCallPresenter implements CallList.Listener {
 
         // Disable notification shade and soft navigation buttons
         if (newState.isIncoming()) {
-            CallCommandClient.getInstance().setSystemBarNavigationEnabled(false);
+            CallCommandClient.getInstance().setSystemBarNavigationEnabled(true);
             if(mAccelerometerListener != null){
                 mAccelerometerListener.enableSensor(true);
             }
@@ -673,15 +674,29 @@ public class InCallPresenter implements CallList.Listener {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             mContext.startActivity(intent);
         } else {
-            mStatusBarNotifier.updateNotificationAndLaunchIncomingCallUi(inCallState, mCallList);
+            mStatusBarNotifier.updateNotificationAndLaunchIncomingCallUi(inCallState, mCallList, false);
+            mCallUiInBackground = mStatusBarNotifier.getIsCallUiInBackground();
         }
     }
 
     /**
      * Starts the incoming call Ui immediately, bypassing the card UI
      */
-    public void startIncomingCallUi(InCallState inCallState) {
-        mStatusBarNotifier.updateNotificationAndLaunchIncomingCallUi(inCallState, mCallList);
+    public void startIncomingCallUi(InCallState inCallState, boolean isCallUiInBackground) {
+        mCallUiInBackground = isCallUiInBackground;
+        mStatusBarNotifier.updateNotificationAndLaunchIncomingCallUi(inCallState, mCallList, isCallUiInBackground);
+    }
+
+    /**
+     * Starts the incoming call Ui immediately used by the incoming call
+     * notification sent from framework's notification mechanism
+     */
+    public void startIncomingCallUi() {
+        // Update the notification and UI this time with fullscreen intent
+        // First cancel the actual notification and then update
+        mStatusBarNotifier.cancelInCall();
+        mStatusBarNotifier.updateNotificationAndLaunchIncomingCallUi(
+                       InCallState.INCALL, mCallList, false);
     }
 
     /**
