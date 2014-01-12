@@ -21,6 +21,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.UserHandle;
 
 /**
  * Top-level Application class for the InCall app.
@@ -34,6 +35,18 @@ public class InCallApp extends Application {
      */
     public static final String ACTION_HANG_UP_ONGOING_CALL =
             "com.android.incallui.ACTION_HANG_UP_ONGOING_CALL";
+
+    /**
+     * Intent Action used for dismiss the current incoming call from Notification bar.
+     */
+    public static final String ACTION_DISMISS_ICOMING_CALL =
+            "com.android.incallui.ACTION_DISMISS_ICOMING_CALL";
+
+    /**
+     * Intent Action used for answer the current incoming call from Notification bar.
+     */
+    public static final String ACTION_ANSWER_ICOMING_CALL =
+            "com.android.incallui.ACTION_ANSWER_ICOMING_CALL";
 
     public InCallApp() {
     }
@@ -64,7 +77,20 @@ public class InCallApp extends Application {
                 //       CallController class that has access to CallCommandClient and
                 //       CallList.
                 InCallPresenter.getInstance().hangUpOngoingCall(context);
+            } else if (action.equals(ACTION_DISMISS_ICOMING_CALL)) {
+                CallCommandClient.getInstance().rejectCall(
+                        CallList.getInstance().getIncomingCall(), false, null);
+            } else if (action.equals(ACTION_ANSWER_ICOMING_CALL)) {
+                closeSystemDialogs(context);
+                CallCommandClient.getInstance().answerCall(
+                        CallList.getInstance().getIncomingCall().getCallId());
+                InCallPresenter.getInstance().startIncomingCallUi();
             }
         }
+    }
+
+    private static void closeSystemDialogs(Context context) {
+        Intent intent = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+        context.sendBroadcastAsUser(intent, UserHandle.CURRENT_OR_SELF);
     }
 }

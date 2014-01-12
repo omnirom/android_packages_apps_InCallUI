@@ -62,6 +62,8 @@
         <receiver android:name="InCallApp$NotificationBroadcastReceiver" exported="false">
             <intent-filter>
                 <action android:name="com.android.incallui.ACTION_HANG_UP_ONGOING_CALL" />
+                <action android:name="com.android.incallui.ACTION_DISMISS_ICOMING_CALL" />
+                <action android:name="com.android.incallui.ACTION_ANSWER_ICOMING_CALL" />
             </intent-filter>
         </receiver>
 
