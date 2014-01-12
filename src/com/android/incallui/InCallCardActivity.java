@@ -54,7 +54,7 @@ public class InCallCardActivity extends Activity {
         answer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InCallPresenter.getInstance().startIncomingCallUi(InCallPresenter.InCallState.INCALL);
+                InCallPresenter.getInstance().startIncomingCallUi(InCallPresenter.InCallState.INCALL, false);
                 CallCommandClient.getInstance().answerCall(mCall.getCallId());
                 finish();
             }
@@ -80,6 +80,15 @@ public class InCallCardActivity extends Activity {
         startContactInfoSearch(identification);
     }
 
+    @Override
+    public void onBackPressed() {
+        final Call call = CallList.getInstance().getIncomingCall();
+        if (call != null) {
+            InCallPresenter.getInstance().startIncomingCallUi(InCallPresenter.InCallState.INCALL, true);
+        }
+        super.onBackPressed();
+    }
+
     /**
      * Starts a query for more contact data for the save primary and secondary calls.
      */
@@ -103,11 +112,6 @@ public class InCallCardActivity extends Activity {
                     }
                 }
             });
-    }
-
-    @Override
-    public void onBackPressed() {
-        // Don't allow back button on this activity
     }
 
 }
