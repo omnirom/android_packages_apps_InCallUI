@@ -27,6 +27,7 @@ import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.SurfaceView;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -54,6 +55,8 @@ public class InCallActivity extends Activity {
     /** Use to pass 'showDialpad' from {@link #onNewIntent} to {@link #onResume} */
     private boolean mShowDialpadRequested;
 
+    private SurfaceView camPreview;
+
     @Override
     protected void onCreate(Bundle icicle) {
         Log.d(this, "onCreate()...  this = " + this);
@@ -75,6 +78,8 @@ public class InCallActivity extends Activity {
 
         // Inflate everything in incall_screen.xml and add it to the screen.
         setContentView(R.layout.incall_screen);
+
+        camPreview = (SurfaceView) findViewById(R.id.campreview);
 
         initializeInCall();
         Log.d(this, "onCreate(): exit");
@@ -499,5 +504,9 @@ public class InCallActivity extends Activity {
     private void onDialogDismissed() {
         mDialog = null;
         InCallPresenter.getInstance().onDismissDialog();
+    }
+
+    public SurfaceView getCamPreview() {
+        return camPreview;
     }
 }

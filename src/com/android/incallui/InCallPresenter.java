@@ -56,6 +56,7 @@ public class InCallPresenter implements CallList.Listener {
     private InCallCardActivity mInCallCardActivity;
     private InCallState mInCallState = InCallState.NO_CALLS;
     private AccelerometerListener mAccelerometerListener;
+    private CameraLightListener mCameraLightListener;
     private ProximitySensor mProximitySensor;
     private boolean mServiceConnected = false;
     private boolean mCallUiInBackground = true;
@@ -176,6 +177,10 @@ public class InCallPresenter implements CallList.Listener {
 
             mInCallActivity = inCallActivity;
 
+            if (mInCallActivity != null) {
+                mCameraLightListener = new CameraLightListener(mContext, mInCallActivity.getCamPreview());
+            }
+
             // By the time the UI finally comes up, the call may already be disconnected.
             // If that's the case, we may need to show an error dialog.
             if (mCallList != null && mCallList.getDisconnectedCall() != null) {
@@ -197,7 +202,7 @@ public class InCallPresenter implements CallList.Listener {
             Log.i(this, "UI Destroyed)");
             updateListeners = true;
             mInCallActivity = null;
-
+            mCameraLightListener = null;
             // We attempt cleanup for the destroy case but only after we recalculate the state
             // to see if we need to come back up or stay shut down. This is why we do the cleanup
             // after the call to onCallListChange() instead of directly here.
@@ -245,8 +250,11 @@ public class InCallPresenter implements CallList.Listener {
         // Renable notification shade and soft navigation buttons, if we are no longer in the
         // incoming call screen
         if (!newState.isIncoming()) {
-            if(mAccelerometerListener != null){
+            if (mAccelerometerListener != null){
                 mAccelerometerListener.enableSensor(false);
+            }
+            if ((mCameraLightListener != null) && mCameraLightListener.isEnabled()) {
+                mCameraLightListener.enable(false);
             }
             CallCommandClient.getInstance().setSystemBarNavigationEnabled(true);
         }
@@ -285,6 +293,9 @@ public class InCallPresenter implements CallList.Listener {
             CallCommandClient.getInstance().setSystemBarNavigationEnabled(true);
             if(mAccelerometerListener != null){
                 mAccelerometerListener.enableSensor(true);
+            }
+            if ((mCameraLightListener != null) && !mCameraLightListener.isEnabled()) {
+                mCameraLightListener.enable(true);
             }
         }
 
@@ -471,8 +482,12 @@ public class InCallPresenter implements CallList.Listener {
         // (1) Attempt to answer a call
         if (incomingCall != null) {
             CallCommandClient.getInstance().answerCall(incomingCall.getCallId());
-            if(mAccelerometerListener != null)
+            if (mAccelerometerListener != null) {
                 mAccelerometerListener.enableSensor(false);
+            }
+            if ((mCameraLightListener != null) && mCameraLightListener.isEnabled()) {
+                mCameraLightListener.enable(false);
+            }
             return true;
         }
 
@@ -725,6 +740,8 @@ public class InCallPresenter implements CallList.Listener {
             mProximitySensor = null;
 
             mAccelerometerListener = null;
+
+            mCameraLightListener = null;
 
             mAudioModeProvider = null;
 

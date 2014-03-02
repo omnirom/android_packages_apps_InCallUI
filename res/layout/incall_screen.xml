@@ -21,6 +21,12 @@
     android:layout_height="match_parent"
     android:id="@+id/main">
 
+    <SurfaceView android:id="@+id/campreview"
+        android:layout_weight="1"
+        android:layout_height="1px"
+        android:layout_width="1px">
+    </SurfaceView>
+
     <LinearLayout
         android:id="@+id/in_call_and_button_container"
         android:layout_width="match_parent"
