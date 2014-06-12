@@ -5,83 +5,77 @@
     android:layout_height="@dimen/incoming_call_card_height"
     android:layout_gravity="bottom|center_horizontal"
     android:orientation="vertical" >
-
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/container_info"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
+        android:layout_height="match_parent"
         android:background="@drawable/incoming_call_card"
         android:orientation="vertical"
         android:padding="8dp" >
-
-        <ImageView
-            android:id="@+id/img_contact"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/picture_unknown" />
-
-        <TextView
-            android:id="@+id/txt_contact_name"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/img_contact"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="2dp"
-            android:layout_toEndOf="@+id/img_contact"
-            android:ellipsize="marquee"
-            android:gravity="center_vertical"
-            android:lines="1"
-            android:textColor="#333333"
-            android:layout_above="@+id/linearLayout"
-            android:textSize="24sp" />
-
         <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_toEndOf="@+id/img_contact"
-            android:id="@+id/linearLayout"
-            android:layout_alignEnd="@+id/txt_contact_name"
-            android:gravity="center_vertical" >
-
-            <Button
-                android:id="@+id/btn_reject"
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                style="@android:style/Widget.Holo.Button.Borderless"
-                android:drawableLeft="@drawable/ic_lockscreen_decline_normal"
-                android:text="@string/description_target_decline"
-                android:textColor="#000000"
-                android:textSize="13sp"
-                android:ellipsize="none" />
-
+            android:layout_width="match_parent"
+            android:layout_height="38dip"
+            android:layout_marginBottom="2dip"
+            android:orientation="horizontal" >
             <TextView
-                android:id="@+id/separator"
-                android:layout_width="1dp"
-                android:layout_height="fill_parent"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
-                android:background="#888888"
-                android:maxWidth="0dp" />
-
-            <Button
-                android:id="@+id/btn_answer"
-                android:layout_width="0dip"
+                android:id="@+id/txt_contact_name"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="5dp"
                 android:layout_weight="1"
-                style="@android:style/Widget.Holo.Button.Borderless"
-                android:drawableLeft="@drawable/ic_lockscreen_answer_normal"
-                android:text="@string/description_target_answer"
+                android:ellipsize="marquee"
+                android:lines="1"
                 android:textColor="#000000"
-                android:textSize="13sp"
-                android:ellipsize="none" />
+                android:textSize="18sp" />
+            <ImageView
+                android:id="@+id/dismiss_ui"
+                android:layout_width="50dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
+                android:background="@drawable/card_call_button"
+                android:src="@drawable/expander_open_holo_light" />
+            <ImageView
+                android:id="@+id/fullscreen_ui"
+                android:layout_width="50dip"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
+                android:background="@drawable/card_call_button"
+                android:src="@drawable/expander_close_holo_light" />
         </LinearLayout>
-
-    </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/incoming_call_card_contact_height"
+            android:orientation="horizontal" >
+            <ImageView
+                android:id="@+id/img_contact"
+                android:layout_width="@dimen/incoming_call_card_contact_height"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:scaleType="centerInside"
+                android:src="@drawable/picture_unknown" />
+            <com.android.incallui.GlowPadWrapper
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:dc="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/glow_pad_view"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@color/incall_call_banner_background"
+                android:focusable="true"
+                android:gravity="center"
+                dc:allowScaling="false"
+                dc:directionDescriptions="@array/incoming_call_widget_2way_direction_descriptions"
+                dc:feedbackCount="1"
+                dc:glowRadius="@dimen/glowpadview_glow_radius"
+                dc:handleDrawable="@drawable/ic_in_call_touch_handle"
+                dc:innerRadius="@dimen/glowpadview_inner_radius"
+                dc:outerRadius="@dimen/call_card_glowpadview_target_placement_radius"
+                dc:outerRingDrawable="@drawable/ic_call_card_outerring"
+                dc:pointDrawable="@drawable/ic_lockscreen_glowdot"
+                dc:snapMargin="@dimen/glowpadview_snap_margin"
+                dc:targetDescriptions="@array/incoming_call_widget_2way_target_descriptions"
+                dc:targetDrawables="@array/incoming_call_widget_2way_targets"
+                dc:vibrationDuration="20" />
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

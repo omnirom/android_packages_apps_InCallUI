@@ -119,7 +119,12 @@
 
 
     <!-- Height of the in-call card -->
-    <dimen name="incoming_call_card_height">112dip</dimen>
+    <dimen name="incoming_call_card_height">150dip</dimen>
+    <dimen name="incoming_call_card_contact_height">96dip</dimen>
+
+    <!-- radius of the glow pad ring inside the card -->
+    <dimen name="call_card_glowpadview_target_placement_radius">70dip</dimen>
+    <dimen name="call_card_glowpadview_outerring_diameter">140dip</dimen>
 
     <!-- Text dimensions for dialpad keys -->
     <dimen name="dialpad_key_numbers_size">40sp</dimen>
