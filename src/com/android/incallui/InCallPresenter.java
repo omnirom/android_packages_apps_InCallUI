@@ -138,7 +138,7 @@ public class InCallPresenter implements CallList.Listener {
         // Finish our presenter card in all cases, we won't need it anymore whatever might
         // happen.
         if (mInCallCardActivity != null) {
-            mInCallCardActivity.finish();
+            mInCallCardActivity.finishWithHide();
         }
 
         final boolean doFinish = (mInCallActivity != null && isActivityStarted());
