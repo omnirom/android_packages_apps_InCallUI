@@ -7,6 +7,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -50,7 +51,7 @@ public class InCallCardActivity extends Activity {
         mContactImage = (ImageView) findViewById(R.id.img_contact);
 
         // Setup the call button
-        Button answer = (Button) findViewById(R.id.btn_answer);
+        ImageButton answer = (ImageButton) findViewById(R.id.btn_answer);
         answer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,7 +61,7 @@ public class InCallCardActivity extends Activity {
             }
         });
 
-        Button reject = (Button) findViewById(R.id.btn_reject);
+        ImageButton reject = (ImageButton) findViewById(R.id.btn_reject);
         reject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

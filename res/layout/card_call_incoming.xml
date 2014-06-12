@@ -5,83 +5,121 @@
     android:layout_height="@dimen/incoming_call_card_height"
     android:layout_gravity="bottom|center_horizontal"
     android:orientation="vertical" >
-
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/container_info"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
+        android:layout_height="match_parent"
         android:background="@drawable/incoming_call_card"
         android:orientation="vertical"
         android:padding="8dp" >
-
-        <ImageView
-            android:id="@+id/img_contact"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/picture_unknown" />
-
-        <TextView
-            android:id="@+id/txt_contact_name"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="25dip"
+            android:orientation="horizontal" >
+            <TextView
+                android:id="@+id/txt_contact_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.9"
+                android:ellipsize="marquee"
+                android:lines="1"
+                android:textColor="#000000"
+                android:textSize="20sp" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.1"
+                android:adjustViewBounds="true"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_phone_call_black" />
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/img_contact"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="2dp"
-            android:layout_toEndOf="@+id/img_contact"
-            android:ellipsize="marquee"
-            android:gravity="center_vertical"
-            android:lines="1"
-            android:textColor="#333333"
-            android:layout_above="@+id/linearLayout"
-            android:textSize="24sp" />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_toEndOf="@+id/img_contact"
-            android:id="@+id/linearLayout"
-            android:layout_alignEnd="@+id/txt_contact_name"
-            android:gravity="center_vertical" >
-
-            <Button
-                android:id="@+id/btn_reject"
-                android:layout_width="0dip"
+            android:orientation="horizontal" >
+            <ImageView
+                android:id="@+id/img_contact"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                style="@android:style/Widget.Holo.Button.Borderless"
-                android:drawableLeft="@drawable/ic_lockscreen_decline_normal"
-                android:text="@string/description_target_decline"
-                android:textColor="#000000"
-                android:textSize="13sp"
-                android:ellipsize="none" />
-
-            <TextView
-                android:id="@+id/separator"
-                android:layout_width="1dp"
-                android:layout_height="fill_parent"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
-                android:background="#888888"
-                android:maxWidth="0dp" />
-
-            <Button
-                android:id="@+id/btn_answer"
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                style="@android:style/Widget.Holo.Button.Borderless"
-                android:drawableLeft="@drawable/ic_lockscreen_answer_normal"
-                android:text="@string/description_target_answer"
-                android:textColor="#000000"
-                android:textSize="13sp"
-                android:ellipsize="none" />
+                android:adjustViewBounds="true"
+                android:scaleType="centerInside"
+                android:src="@drawable/picture_unknown" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="5dp" >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:orientation="vertical" >
+                    <ImageButton
+                        android:id="@+id/btn_reject"
+                        style="@android:style/Widget.Holo.Button.Borderless"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="0.9"
+                        android:background="@android:color/transparent"
+                        android:ellipsize="none"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_decline_circle_normal" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="0.1"
+                        android:ellipsize="marquee"
+                        android:gravity="bottom"
+                        android:lines="1"
+                        android:text="@string/description_target_decline"
+                        android:textColor="#000000"
+                        android:textSize="12sp" />
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/separator"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginStart="4dp"
+                    android:background="#888888"
+                    android:maxWidth="0dp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:orientation="vertical" >
+                    <ImageButton
+                        android:id="@+id/btn_answer"
+                        style="@android:style/Widget.Holo.Button.Borderless"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="0.9"
+                        android:background="@android:color/transparent"
+                        android:ellipsize="none"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_answer_circle_normal" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="0.1"
+                        android:ellipsize="marquee"
+                        android:gravity="bottom"
+                        android:lines="1"
+                        android:text="@string/description_target_answer"
+                        android:textColor="#000000"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
-
-    </RelativeLayout>
+    </LinearLayout>
 </LinearLayout>
