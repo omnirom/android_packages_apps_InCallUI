@@ -61,4 +61,7 @@
 
     <!-- Translucent shadow color -->
     <color name="translucent_shadow">#33999999</color>
+
+    <color name="fullscreen_ui_button_color">#999999</color>
+    <color name="fullscreen_ui_button_pressed_color">#808080</color>
 </resources>
