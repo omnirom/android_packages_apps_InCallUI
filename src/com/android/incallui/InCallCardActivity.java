@@ -7,6 +7,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,7 +21,7 @@ import com.android.services.telephony.common.Call;
  * Handles the call card activity that pops up when a call
  * arrives
  */
-public class InCallCardActivity extends Activity {
+public class InCallCardActivity extends Activity implements GlowPadWrapper.AnswerListener {
     private static final int SLIDE_IN_DURATION_MS = 500;
 
     private TextView mNameTextView;
@@ -49,25 +50,27 @@ public class InCallCardActivity extends Activity {
         mNameTextView = (TextView) findViewById(R.id.txt_contact_name);
         mContactImage = (ImageView) findViewById(R.id.img_contact);
 
-        // Setup the call button
-        Button answer = (Button) findViewById(R.id.btn_answer);
-        answer.setOnClickListener(new View.OnClickListener() {
+        ImageButton fullscreenUI = (ImageButton) findViewById(R.id.fullscreen_ui);
+        fullscreenUI.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // start fullscreen ui
                 InCallPresenter.getInstance().startIncomingCallUi(InCallPresenter.InCallState.INCALL, false);
-                CallCommandClient.getInstance().answerCall(mCall.getCallId());
                 finish();
             }
         });
 
-        Button reject = (Button) findViewById(R.id.btn_reject);
-        reject.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CallCommandClient.getInstance().rejectCall(mCall, false, null);
-                finish();
-            }
-        });
+        GlowPadWrapper glowpad = (GlowPadWrapper) findViewById(R.id.glow_pad_view);
+        // Answer or Decline.
+        glowpad.setTargetResources(R.array.incoming_call_widget_2way_targets);
+        glowpad.setTargetDescriptionsResourceId(
+                R.array.incoming_call_widget_2way_target_descriptions);
+        glowpad.setDirectionDescriptionsResourceId(
+                R.array.incoming_call_widget_2way_direction_descriptions);
+        glowpad.reset(false);
+
+        glowpad.setAnswerListener(this);
+        glowpad.startPing();
 
         // Slide in the dialog
         final LinearLayout vg = (LinearLayout) findViewById(R.id.root);
@@ -114,5 +117,21 @@ public class InCallCardActivity extends Activity {
             });
     }
 
+    @Override
+    public void onAnswer() {
+        InCallPresenter.getInstance().startIncomingCallUi(InCallPresenter.InCallState.INCALL, false);
+        CallCommandClient.getInstance().answerCall(mCall.getCallId());
+        finish();
+    }
+
+    @Override
+    public void onDecline() {
+        CallCommandClient.getInstance().rejectCall(mCall, false, null);
+        finish();
+    }
+
+    @Override
+    public void onText() {
+    }
 }
 
