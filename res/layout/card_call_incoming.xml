@@ -50,7 +50,7 @@
             <ImageView
                 android:id="@+id/img_contact"
                 android:layout_width="@dimen/incoming_call_card_contact_height"
-                android:layout_height="match_parent"
+                android:layout_height="@dimen/incoming_call_card_contact_height"
                 android:adjustViewBounds="true"
                 android:scaleType="centerInside"
                 android:src="@drawable/picture_unknown" />
@@ -58,8 +58,8 @@
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:dc="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/glow_pad_view"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/incoming_call_card_contact_height"
                 android:background="@color/incall_call_banner_background"
                 android:focusable="true"
                 android:gravity="center"
