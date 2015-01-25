@@ -76,4 +76,13 @@
 
     <!-- 20% opacity, theme color. -->
     <color name="incall_dialpad_touch_tint">#330288d1</color>
+    
+    <!-- Exposed colors for theming -->
+    
+    <color name="exposed_bg_dark">#ffffffff</color>
+    <color name="exposed_bg_light">#ff000000</color>
+    <color name="exposed_primary_text_light">#de000000</color>
+    <color name="exposed_secondary_text_light">#8a000000</color>
+    <color name="exposed_primary_text_dark">#ffffffff</color>
+    <color name="exposed_secondary_text_dark">#b3ffffff</color>
 </resources>
