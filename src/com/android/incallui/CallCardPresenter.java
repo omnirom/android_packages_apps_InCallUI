@@ -24,6 +24,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.telecom.Call.Details;
 import android.telecom.DisconnectCause;
 import android.telecom.PhoneAccount;
 import android.telecom.PhoneAccountHandle;
@@ -64,6 +65,7 @@ public class CallCardPresenter extends Presenter<CallCardPresenter.CallCardUi>
     private ContactCacheEntry mPrimaryContactInfo;
     private ContactCacheEntry mSecondaryContactInfo;
     private CallTimer mCallTimer;
+
     private Context mContext;
 
     public static class ContactLookupCallback implements ContactInfoCacheCallback {
@@ -219,7 +221,7 @@ public class CallCardPresenter extends Presenter<CallCardPresenter.CallCardUi>
         }
 
         // Start/stop timers.
-        if (mPrimary != null && mPrimary.getState() == Call.State.ACTIVE) {
+        if (isPrimaryCallActive()) {
             Log.d(this, "Starting the calltime timer");
             mCallTimer.start(CALL_TIME_UPDATE_INTERVAL_MS);
         } else {
@@ -241,7 +243,10 @@ public class CallCardPresenter extends Presenter<CallCardPresenter.CallCardUi>
                     new DisconnectCause(DisconnectCause.UNKNOWN),
                     null,
                     null,
-                    null);
+                    null,
+                    false /* isWifi */,
+                    false /* isConference */);
+            getUi().showHdAudioIndicator(false);
         }
 
         // Hide/show the contact photo based on the video state.
@@ -263,13 +268,11 @@ public class CallCardPresenter extends Presenter<CallCardPresenter.CallCardUi>
     }
 
     @Override
-    public void onDetailsChanged(Call call, android.telecom.Call.Details details) {
+    public void onDetailsChanged(Call call, Details details) {
         updatePrimaryCallState();
 
-        if (call.can(android.telecom.Call.Details.CAPABILITY_MANAGE_CONFERENCE) !=
-                android.telecom.Call.Details.can(
-                        details.getCallCapabilities(),
-                        android.telecom.Call.Details.CAPABILITY_MANAGE_CONFERENCE)) {
+        if (call.can(Details.CAPABILITY_MANAGE_CONFERENCE) !=
+                Details.can(details.getCallCapabilities(), Details.CAPABILITY_MANAGE_CONFERENCE)) {
             maybeShowManageConferenceCallButton();
         }
     }
@@ -298,7 +301,14 @@ public class CallCardPresenter extends Presenter<CallCardPresenter.CallCardUi>
                     mPrimary.getDisconnectCause(),
                     getConnectionLabel(),
                     getCallStateIcon(),
-                    getGatewayNumber());
+                    getGatewayNumber(),
+                    primaryCallCan(Details.CAPABILITY_WIFI),
+                    mPrimary.isConferenceCall());
+
+            boolean showHdAudioIndicator =
+                    isPrimaryCallActive() && primaryCallCan(Details.CAPABILITY_HIGH_DEF_AUDIO);
+            getUi().showHdAudioIndicator(showHdAudioIndicator);
+
             setCallbackNumber();
         }
     }
@@ -321,7 +331,7 @@ public class CallCardPresenter extends Presenter<CallCardPresenter.CallCardUi>
             return false;
         }
 
-        return mPrimary.can(android.telecom.Call.Details.CAPABILITY_MANAGE_CONFERENCE);
+        return mPrimary.can(Details.CAPABILITY_MANAGE_CONFERENCE);
     }
 
     private void setCallbackNumber() {
@@ -354,10 +364,10 @@ public class CallCardPresenter extends Presenter<CallCardPresenter.CallCardUi>
     public void updateCallTime() {
         final CallCardUi ui = getUi();
 
-        if (ui == null || mPrimary == null || mPrimary.getState() != Call.State.ACTIVE) {
-            if (ui != null) {
-                ui.setPrimaryCallElapsedTime(false, 0);
-            }
+        if (ui == null) {
+            mCallTimer.cancel();
+        } else if (!isPrimaryCallActive()) {
+            ui.setPrimaryCallElapsedTime(false, 0);
             mCallTimer.cancel();
         } else {
             final long callStart = mPrimary.getConnectTimeMillis();
@@ -617,13 +627,6 @@ public class CallCardPresenter extends Presenter<CallCardPresenter.CallCardUi>
             }
         }
 
-        // Return high definition audio icon if the capability is indicated.
-        if (mPrimary.getTelecommCall().getDetails().can(
-                android.telecom.Call.Details.CAPABILITY_HIGH_DEF_AUDIO)
-                && mPrimary.getState() == Call.State.ACTIVE) {
-            return mContext.getResources().getDrawable(R.drawable.ic_hd_audio);
-        }
-
         return null;
     }
 
@@ -701,9 +704,16 @@ public class CallCardPresenter extends Presenter<CallCardPresenter.CallCardUi>
         ui.setCallCardVisible(!isFullScreenVideo);
     }
 
+    private boolean isPrimaryCallActive() {
+        return mPrimary != null && mPrimary.getState() == Call.State.ACTIVE;
+    }
+
+    private boolean primaryCallCan(int capability) {
+        return mPrimary.getTelecommCall().getDetails().can(capability);
+    }
+
     private String getConferenceString(Call call) {
-        boolean isGenericConference = call.can(
-                android.telecom.Call.Details.CAPABILITY_GENERIC_CONFERENCE);
+        boolean isGenericConference = call.can(Details.CAPABILITY_GENERIC_CONFERENCE);
         Log.v(this, "getConferenceString: " + isGenericConference);
 
         final int resId = isGenericConference
@@ -712,8 +722,7 @@ public class CallCardPresenter extends Presenter<CallCardPresenter.CallCardUi>
     }
 
     private Drawable getConferencePhoto(Call call) {
-        boolean isGenericConference = call.can(
-                android.telecom.Call.Details.CAPABILITY_GENERIC_CONFERENCE);
+        boolean isGenericConference = call.can(Details.CAPABILITY_GENERIC_CONFERENCE);
         Log.v(this, "getConferencePhoto: " + isGenericConference);
 
         final int resId = isGenericConference
@@ -732,7 +741,8 @@ public class CallCardPresenter extends Presenter<CallCardPresenter.CallCardUi>
                 String providerLabel, boolean isConference);
         void setCallState(int state, int videoState, int sessionModificationState,
                 DisconnectCause disconnectCause, String connectionLabel,
-                Drawable connectionIcon, String gatewayNumber);
+                Drawable connectionIcon, String gatewayNumber, boolean isWifi,
+                boolean isConference);
         void setPrimaryCallElapsedTime(boolean show, long duration);
         void setPrimaryName(String name, boolean nameIsNumber);
         void setPrimaryImage(Drawable image);
@@ -742,6 +752,7 @@ public class CallCardPresenter extends Presenter<CallCardPresenter.CallCardUi>
         void setCallbackNumber(String number, boolean isEmergencyCalls);
         void setPhotoVisible(boolean isVisible);
         void setProgressSpinnerVisible(boolean visible);
+        void showHdAudioIndicator(boolean visible);
         void showManageConferenceCallButton(boolean visible);
         boolean isManageConferenceVisible();
     }
