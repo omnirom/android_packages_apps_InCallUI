@@ -18,7 +18,9 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentStart="true">
 
     <!-- The main content of the CallCard is either one or two "call info"
          blocks, depending on whether one or two lines are in use.
@@ -58,17 +60,32 @@
 
     </LinearLayout>
 
-    <!-- Contact photo for primary call info -->
-    <ImageView android:id="@+id/photo"
-        android:layout_below="@id/primary_call_info_container"
-        android:layout_width="match_parent"
+    <FrameLayout
         android:layout_height="match_parent"
-        android:layout_gravity="center_vertical"
-        android:gravity="top|center_horizontal"
-        android:scaleType="centerCrop"
-        android:contentDescription="@string/contactPhoto"
-        android:background="@android:color/white"
-        android:src="@drawable/img_no_image_automirrored" />
+        android:layout_width="match_parent"
+        android:layout_below="@id/primary_call_info_container"
+        android:id="@+id/call_card_content">
+
+        <!-- Contact photo for primary call info -->
+        <ImageView android:id="@+id/photo"
+            android:layout_below="@id/primary_call_info_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="top|center_horizontal"
+            android:scaleType="centerCrop"
+            android:importantForAccessibility="no"
+            android:background="@android:color/white"
+            android:src="@drawable/img_no_image_automirrored" />
+
+    </FrameLayout>
+
+    <fragment android:name="com.android.incallui.VideoCallFragment"
+        android:id="@+id/videoCallFragment"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <!-- Progress spinner, useful for indicating pending operations such as upgrade to video. -->
     <FrameLayout
@@ -88,6 +105,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:indeterminate="true" />
+
     </FrameLayout>
 
     <!-- Secondary "Call info" block, for the background ("on hold") call. -->
@@ -96,26 +114,17 @@
     <include layout="@layout/manage_conference_call_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@id/photo" />
+        android:layout_below="@id/primary_call_info_container" />
 
-    <!-- Placeholder for the dialpad which is replaced with the dialpad fragment when shown. -->
+    <!-- Placeholder for various fragments that are added dynamically underneath the caller info. -->
     <FrameLayout
-        android:id="@+id/dialpadFragmentContainer"
+        android:id="@+id/answer_and_dialpad_container"
         android:layout_below="@id/primary_call_info_container"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:elevation="@dimen/dialpad_elevation" />
-
-    <fragment android:name="com.android.incallui.AnswerFragment"
-        android:id="@+id/answerFragment"
-        android:layout_below="@id/primary_call_info_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="@dimen/glowpadview_margin_bottom"
-        android:visibility="gone" />
 
     <FrameLayout
         android:id="@+id/floating_end_call_action_button_container"

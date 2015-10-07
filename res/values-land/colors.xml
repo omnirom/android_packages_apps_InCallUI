@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
-  ~ Copyright (C) 2014 The Android Open Source Project
+  ~ Copyright (C) 2015 The Android Open Source Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -16,16 +15,7 @@
   ~ limitations under the License
   -->
 
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <item android:id="@+id/backgroundItem"
-          android:drawable="@drawable/btn_background" />
-
-    <item>
-        <bitmap android:src="@drawable/ic_toolbar_audio_phone"
-            android:gravity="center"
-            android:tint="@color/selectable_icon_tint"
-            android:autoMirrored="true" />
-    </item>
-
-</layer-list>
+<resources>
+    <!-- Background color for status bar. For portrait this will be ignored. -->
+    <color name="statusbar_background_color">#000000</color>
+</resources>
